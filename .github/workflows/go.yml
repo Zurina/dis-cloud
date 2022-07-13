@@ -35,7 +35,7 @@ jobs:
     - name: Start binary
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: 54.90.198.6
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
         port: 22
