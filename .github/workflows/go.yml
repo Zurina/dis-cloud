@@ -37,7 +37,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ubuntu
-        key: ${{ secrets.EC"_KEY }}
+        key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
           sudo chmod +x ~/main
