@@ -46,7 +46,6 @@ Conclusion
     curl -O https://storage.googleapis.com/golang/go1.17.5.linux-amd64.tar.gz
     tar -xvf go1.17.5.linux-amd64.tar.gz
     sudo mv go /usr/local
-    sudo subl ~/.profile
     export GOPATH=$HOME/work
     export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
     source ~/.profile
