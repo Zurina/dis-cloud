@@ -31,14 +31,3 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         source: "main"
         target: "~/main"
-
-    
-    - name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.EC2_KEY }}
-        port: ${{ secrets.PORT }}
-        script: whoami
-
