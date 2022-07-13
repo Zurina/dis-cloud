@@ -36,6 +36,7 @@ jobs:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       with:
+        username: ubuntu
         host: ${{ secrets.HOST }}
         key: ${{ secrets.EC2_KEY }}
         port: 22

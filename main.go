@@ -16,5 +16,5 @@ func main() {
 		fmt.Fprint(w, id.String())
 	})
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":80", r)
 }
