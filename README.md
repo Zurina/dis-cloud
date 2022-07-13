@@ -28,7 +28,32 @@ Cons
 
 Conclusion
 
-- My conclusion cannot be concluded in my opinion, as it depends on what kind of company we're talking about. If it's a startup in question, I think I'd avoid vendor lock-in and thereby sticking with Ubuntu OS. If however, we're talking about a big company that is already heavily integrated in AWS, I would say switing to AWS Linux 2022 makes more sense. 
+- My conclusion cannot be concluded in my opinion, as it depends on what kind of company we're talking about. If it's a startup in question, I think I'd avoid vendor lock-in and thereby sticking with Ubuntu OS. If however, we're talking about a big company that is already heavily integrated in AWS, I would say switing to AWS Linux 2022 makes more sense.
+
+### 2. Part two. EC2 and custom AMI
+
+#### Step-by-step guide how to create custom AMI
+
+- Log in to the AWS Management Console, display the EC2 page for your region, then click Instances.
+- Choose the instance from which you want to create a custom AMI.
+- Click Actions, Click Image and Templates, and then click Create Image.
+- Fill in the details.
+- Click Create Image.
+
+#### Prepare script that is gonna launch your app
+
+    git clone https://github.com/Zurina/dis-cloud.git
+    curl -O https://storage.googleapis.com/golang/go1.17.5.linux-amd64.tar.gz
+    tar -xvf go1.17.5.linux-amd64.tar.gz
+    sudo mv go /usr/local
+    sudo subl ~/.profile
+    export GOPATH=$HOME/work
+    export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+    source ~/.profile
+    cd dis-cloud
+    go build main.go
+    chmod +x main
+    ./main
 
 
 
