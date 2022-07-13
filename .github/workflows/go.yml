@@ -19,7 +19,22 @@ jobs:
         go-version: 1.18
 
     - name: Build
-      run: go build -v ./...
+      run: go build main.go
 
-    - name: Test
-      run: go test -v ./...
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        source: "main"
+        target: "~/main"
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: ~/main
+
