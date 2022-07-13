@@ -29,16 +29,17 @@ jobs:
         host: 54.90.198.6
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
-        port: 22
         source: "main"
         target: "~/main"
 
     - name: Start binary
       uses: appleboy/ssh-action@master
       with:
-        host: 54.90.198.6
+        host: ${{ secrets.HOST }}
         username: ubuntu
-        key: ${{ secrets.EC2_KEY }}
+        key: ${{ secrets.EC"_KEY }}
         port: 22
-        script: sudo chmod +x ~/main && ~/main
+        script: |
+          sudo chmod +x ~/main
+          sudo ~/main
 
