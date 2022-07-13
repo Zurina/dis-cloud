@@ -37,7 +37,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         username: ubuntu
-        host: ${{ secrets.HOST }}
+        host: 54.90.198.6
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: ~/main
