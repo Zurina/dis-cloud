@@ -33,12 +33,12 @@ jobs:
         source: "main"
         target: "~/main"
 
-    - name: executing remote ssh commands using password
+    - name: Start binary
       uses: appleboy/ssh-action@master
       with:
-        username: ubuntu
         host: 54.90.198.6
+        username: ubuntu
         key: ${{ secrets.EC2_KEY }}
         port: 22
-        script: ~/main
+        script: sudo chmod +x ~/main && ~/main
 
