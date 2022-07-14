@@ -6,6 +6,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"time"
 )
 
 type Instance interface {
@@ -21,7 +22,13 @@ type instance struct {
 
 func (s *instance) URL() string { return s.addr }
 
-func (s *instance) Healthcheck() bool { return true }
+func (s *instance) Healthcheck() bool {
+	client := http.Client{
+		Timeout: 1 * time.Second,
+	}
+	_, err := client.Get(s.URL() + "health")
+	return err == nil
+}
 
 func (s *instance) Serve(rw http.ResponseWriter, req *http.Request) {
 	s.proxy.ServeHTTP(rw, req)
@@ -57,6 +64,7 @@ func NewLoadBalancer(port string, instances []Instance) *LoadBalancer {
 
 func (lb *LoadBalancer) getNextAvailableServer() Instance {
 	instance := lb.instances[lb.rbc%len(lb.instances)]
+
 	for !instance.Healthcheck() {
 		lb.rbc++
 		instance = lb.instances[lb.rbc%len(lb.instances)]
