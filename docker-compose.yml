@@ -3,24 +3,18 @@ version: '3.4'
 services:
   dis-cloud-1:
     image: dis-cloud
-    # environment:
-    #   - HTTP_PORT=8080
-    # ports:
-    #   - "8080:8080"
+    environment:
+      - HTTP_PORT=80
 
   dis-cloud-2:
     image: dis-cloud
-    # environment:
-    #   - HTTP_PORT=8081
-    # ports:
-    #   - "8081:8081"
+    environment:
+      - HTTP_PORT=80
 
   dis-cloud-3:
     image: dis-cloud
-    # environment:
-    #   - HTTP_PORT=8082
-    # ports:
-    #   - "8082:8082"
+    environment:
+      - HTTP_PORT=80
 
   loadbalancer:
     image: loadbalancer
