@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -16,14 +17,15 @@ func main() {
 		return c.JSON(http.StatusOK, struct{ Status string }{Status: "OK"})
 	})
 
-	e.GET("/host_id", func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		id := uuid.New()
+		fmt.Println(os.Getenv("HTTP_PORT"))
 		return c.JSON(http.StatusOK, struct{ Host_Id string }{Host_Id: id.String()})
 	})
 
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
-		httpPort = "8080"
+		httpPort = "80"
 	}
 
 	e.Logger.Fatal(e.Start(":" + httpPort))

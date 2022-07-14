@@ -59,6 +59,25 @@ And then:
     chmod +x main
     ./main
 
+### Docker & Docker Compose
+
+To setup the loadbalancer locally, follow following steps:
+
+- In the root of the project, run:
+
+        docker build -t dis-cloud .
+
+- Change directory to loadbalancer.
+- Run:
+
+        docker build -t loadbalancer .
+
+- Run:
+
+        docker-compose up
+
+- You should now be able to hit the loadbalancer on http://localhost:8000
+
 
 
 
