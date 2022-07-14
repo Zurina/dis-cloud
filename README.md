@@ -34,6 +34,17 @@ Conclusion
 
 #### Step-by-step guide how to create custom AMI
 
+First install go on the EC2 instance using following commands:
+
+- curl -O https://storage.googleapis.com/golang/go1.17.5.linux-amd64.tar.gz
+- tar -xvf go1.17.5.linux-amd64.tar.gz
+- sudo mv go /usr/local
+- export GOPATH=$HOME/work
+- export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+- source ~/.profile
+
+And then:
+
 - Log in to the AWS Management Console, display the EC2 page for your region, then click Instances.
 - Choose the instance from which you want to create a custom AMI.
 - Click Actions, Click Image and Templates, and then click Create Image.
@@ -43,12 +54,6 @@ Conclusion
 #### Prepare script that is gonna launch your app
 
     git clone https://github.com/Zurina/dis-cloud.git
-    curl -O https://storage.googleapis.com/golang/go1.17.5.linux-amd64.tar.gz
-    tar -xvf go1.17.5.linux-amd64.tar.gz
-    sudo mv go /usr/local
-    export GOPATH=$HOME/work
-    export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-    source ~/.profile
     cd dis-cloud
     go build main.go
     chmod +x main
