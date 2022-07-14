@@ -1,20 +1,30 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	r := mux.NewRouter()
 
-	r.HandleFunc("/host_id", func(w http.ResponseWriter, r *http.Request) {
-		id := uuid.New()
-		fmt.Fprint(w, id.String())
+	e := echo.New()
+
+	e.GET("/ping", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, struct{ Status string }{Status: "OK"})
 	})
 
-	http.ListenAndServe(":8080", r)
+	e.GET("/host_id", func(c echo.Context) error {
+		id := uuid.New()
+		return c.JSON(http.StatusOK, struct{ Host_Id string }{Host_Id: id.String()})
+	})
+
+	httpPort := os.Getenv("HTTP_PORT")
+	if httpPort == "" {
+		httpPort = "8080"
+	}
+
+	e.Logger.Fatal(e.Start(":" + httpPort))
 }
