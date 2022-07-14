@@ -64,10 +64,14 @@ func NewLoadBalancer(port string, instances []Instance) *LoadBalancer {
 
 func (lb *LoadBalancer) getNextAvailableServer() Instance {
 	instance := lb.instances[lb.rbc%len(lb.instances)]
-
+	count := 0
 	for !instance.Healthcheck() {
 		lb.rbc++
 		instance = lb.instances[lb.rbc%len(lb.instances)]
+		count++
+		if count >= len(lb.instances) {
+			return nil
+		}
 	}
 	lb.rbc++
 	return instance
@@ -75,6 +79,10 @@ func (lb *LoadBalancer) getNextAvailableServer() Instance {
 
 func (lb *LoadBalancer) serveProxy(rw http.ResponseWriter, req *http.Request) {
 	targetInstance := lb.getNextAvailableServer()
+	if targetInstance == nil {
+		rw.WriteHeader(500)
+		return
+	}
 	fmt.Printf("forwarding request to URL %q\n", targetInstance.URL())
 	targetInstance.Serve(rw, req)
 }
