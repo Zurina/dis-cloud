@@ -78,6 +78,31 @@ To setup the loadbalancer locally, follow following steps:
 
 - You should now be able to hit the loadbalancer on http://localhost:8000
 
+### AWS CLI tool
+
+        aws ec2 run-instances --image-id ami-0149623249da586db --placement AvailabilityZone=us-east-1c --count 1 --instance-type t2.micro --key-name mathias --region us-east-1 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=mat-ins}]'
+
+        aws ec2 create-volume --region us-east-1 --availability-zone us-east-1c --size 1 --tag-specification 'ResourceType=volume,Tags=[{Key=Name,Value=mat-volume}]'
+
+        VOLUME_ID=$(aws ec2 describe-volumes  --region us-east-1 --query "Volumes[*].{ID:VolumeId,AZ:AvailabilityZone,Size:Size}" --filters "Name=tag:Name,Values=mat-volume" | jq .[].ID | tr -d \")
+
+        INSTANCE_ID=$(aws ec2 describe-instances --region us-east-1 --query "Reservations[*].Instances[].InstanceId" --filter 'Name=tag:Name,Values=mat-ins' --output text)      
+        
+        aws ec2 attach-volume --region us-east-1 --device /dev/xvdb --instance-id $INSTANCE_ID --volume-id $VOLUME_ID
+
+        SNAPSHOT_ID=$(aws ec2 create-snapshot --region us-east-1 --volume-id $VOLUME_ID --tag-specifications 'ResourceType=snapshot,Tags=[{Key=Name,Value=mat-snap}]' | jq .SnapshotId | tr -d \")
+
+        aws ec2 detach-volume --region us-east-1 --device /dev/xvdb --instance-id $INSTANCE_ID --volume-id $VOLUME_ID
+
+        aws ec2 delete-snapshot --region us-east-1 --snapshot-id $SNAPSHOT_ID
+
+        aws ec2 terminate-instances --region us-east-1 --instance-id $INSTANCE_ID --delete-volumes
+
+
+
+
+
+
 
 
 
