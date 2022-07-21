@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -87,19 +89,50 @@ func (lb *LoadBalancer) serveProxy(rw http.ResponseWriter, req *http.Request) {
 	targetInstance.Serve(rw, req)
 }
 
+type HostInstances []struct {
+	Hostname string `json:"Hostname"`
+}
+
 func main() {
-	instances := []Instance{
-		newInstance("http://dis-cloud-1/"),
-		newInstance("http://dis-cloud-2/"),
-		newInstance("http://dis-cloud-3/"),
+	confBytes := GetHostConfiguration()
+
+	var hi HostInstances
+	err := json.Unmarshal(confBytes, &hi)
+	if err != nil {
+		panic(err)
+	}
+
+	instances := []Instance{}
+
+	for _, v := range hi {
+		instances = append(instances, newInstance(v.Hostname))
 	}
 
 	lb := NewLoadBalancer("8000", instances)
-	handleRedirect := func(rw http.ResponseWriter, req *http.Request) {
-		lb.serveProxy(rw, req)
+	handleRedirect := func(w http.ResponseWriter, r *http.Request) {
+		lb.serveProxy(w, r)
 	}
 
 	http.HandleFunc("/", handleRedirect)
+	http.HandleFunc("/host_configuration", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			conf := GetHostConfiguration()
+			fmt.Fprint(w, string(conf))
+		case "POST":
+			body, _ := ioutil.ReadAll(r.Body)
+			err := PostHostConfiguration(body)
+			if err != nil {
+				fmt.Fprintf(w, err.Error())
+				return
+			}
+			fmt.Fprintf(w, "Successfully updated host configuration")
+		default:
+			resp := "HTTP method not supported"
+			w.Write([]byte(resp))
+			fmt.Fprintf(w, "Unknown request!")
+		}
+	})
 
 	fmt.Printf("serving requests at 'localhost:%s'\n", lb.port)
 	http.ListenAndServe(":"+lb.port, nil)

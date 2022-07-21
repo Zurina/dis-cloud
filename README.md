@@ -98,6 +98,22 @@ To setup the loadbalancer locally, follow following steps:
 
         aws ec2 terminate-instances --region us-east-1 --instance-id $INSTANCE_ID --delete-volumes
 
+### AWS S3 Implementation
+
+The loadbalancer fetches the configuration on start up.
+
+Actions:
+
+- GET request, /host_configuration
+
+- POST request, /host_configuration
+
+        [
+                {"Hostname":"http://dis-cloud-1/"},
+                {"Hostname":"http://dis-cloud-2/"},
+                {"Hostname":"http://dis-cloud-3/"}
+        ]
+
 
 
 
