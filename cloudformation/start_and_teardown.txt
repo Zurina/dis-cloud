@@ -1,0 +1,7 @@
+Setup all resources by executing following command:
+
+    aws cloudformation deploy --stack-name mathias --template-file ./system.yaml --region us-east-1
+
+Tear down all resoucres by executing following command:
+
+    aws cloudformation delete-stack --stack-name mathias
