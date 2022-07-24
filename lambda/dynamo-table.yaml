@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  ReadCapacityUnits:
+        Description: Provisioned read throughput
+        Type: Number
+        Default: '5'
+        MinValue: '1'
+        MaxValue: '10000'
+        ConstraintDescription: must be between 5 and 10000
+  WriteCapacityUnits:
+    Description: Provisioned write throughput
+    Type: Number
+    Default: '10'
+    MinValue: '1'
+    MaxValue: '10000'
+    ConstraintDescription: must be between 5 and 10000
+
+Resources:
+  Table:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: !Ref 'ReadCapacityUnits'
+          WriteCapacityUnits: !Ref 'WriteCapacityUnits'
+
+Outputs:
+  TableName:
+    Description: The created DDB table name
+    Value: !Ref Table
+    Export:
+      Name: !Sub ${AWS::StackName}-ddb-table-name

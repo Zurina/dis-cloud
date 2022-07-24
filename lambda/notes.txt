@@ -1,0 +1,13 @@
+I created the the DynamoDB table using cloudformation with the dynamo-table.yaml file running following command:
+
+    aws cloudformation deploy --stack-name lambda-mat --template-file ./dynamo-table.yaml --region us-east-1
+
+Creating the Lamdba function with use of the ARN value of the IAM Role I created for it. The role
+have access to executing Lambdas as well as accessing S3.
+
+I zipped the index.js file into a zip file called function.zip.
+
+    aws lambda create-function --function-name lambda-mathias \
+    --zip-file fileb://./function.zip --handler index.handler \
+    --runtime nodejs12.x --role arn:aws:iam::056999274703:role/lambda-dynamodb-role
+
