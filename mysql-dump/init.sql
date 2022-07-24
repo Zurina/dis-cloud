@@ -1,7 +1,7 @@
-create database test;
+CREATE DATABASE IF NOT EXISTS test;
 use test;
 
-CREATE TABLE uuid
+CREATE TABLE IF NOT EXISTS uuid
 (
 id INTEGER AUTO_INCREMENT,
 uuid TEXT,

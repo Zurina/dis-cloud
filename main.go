@@ -30,7 +30,13 @@ func main() {
 	})
 
 	e.GET("/db-uuid", func(c echo.Context) error {
-		db, err := sql.Open("mysql", "root:password@tcp(db:3306)/test")
+		user := os.Getenv("DB_USER")
+		pw := os.Getenv("DB_PASSWORD")
+		host := os.Getenv("DB_HOST")
+		port := os.Getenv("DB_PORT")
+
+		connString := fmt.Sprintf("%s:%s@tcp(%s:%s)", user, pw, host, port)
+		db, err := sql.Open("mysql", connString)
 		if err != nil {
 			panic(err.Error())
 		}
